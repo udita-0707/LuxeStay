@@ -1,0 +1,51 @@
+<style>
+  .btn-search{
+    /* background-color: black; */
+    color: white;
+    border-color: white;
+    border-radius: 25px;
+    padding: auto;
+  }
+
+  .btn-search:hover{
+    color: white;
+    background-color: var(--primary-color);;
+  }
+  .btn-search i{
+    margin-right: 0.5rem;
+  }
+
+  .search-input{
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem 0.75rem 3rem;
+  }
+</style>
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link " href="/">Home</a>
+          <a class="nav-link" href="/listings">Explore</a>
+        </div>
+        <div class="navbar-nav ml-auto">
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2 search-input" type="search" placeholder="Search Destination" aria-label="Search">
+            <button class="btn btn-search btn-outline my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+          </form>
+        </div>
+        <div class="navbar-nav ml-auto">
+          <a class="nav-link" href="/listings/new">Add New Listing</a>
+          <% if(!currentUser) { %>
+            <!-- <a class="nav-link " href="/signup"><b>SignUp</b></a> -->
+            <a class="nav-link" href="/login"><b>LogIn</b></a>
+          <% } %> <% if(currentUser) { %>
+          <a class="nav-link" href="/logout"><b>LogOut</b></a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </nav>
