@@ -1,9 +1,14 @@
+// if(process.env.NODE_ENV !== "production") {
+require("dotenv").config();
+// }
 const  mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
+const MongoStore = require('connect-mongo');
+const dbURL = process.env.ATLASDB_URL;
 
 async function main() {
-    await mongoose.connect("mongodb://localhost:27017/quest");
+    await mongoose.connect(dbURL);
 }
 
 main().then(() => {

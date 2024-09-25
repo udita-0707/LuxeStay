@@ -45,6 +45,10 @@ const listingSchema = new Schema({
             type: [Number],
             required: true
         }
+    },
+    category:{
+        type: String,
+        required: true
     }
 });
 const Listing = mongoose.model("Listing", listingSchema)

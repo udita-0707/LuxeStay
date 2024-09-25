@@ -1,50 +1,114 @@
 <% layout("/layouts/boilerplate") -%>
-<div class="row mt-3">
-    <div class="col-8 offset-2">
-        <h3>Edit your New Listing</h3>
-        <br>
-        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" enctype="multipart/form-data">
+<style>
+    /* Glassmorphism form styling */
+    .glass-form {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        margin-bottom: 3rem;
+    }
+
+    /* Input fields styling */
+    .glass-input {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: white;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        transition: 0.3s ease;
+    }
+
+    .glass-input:focus {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+        outline: none;
+    }
+
+    /* Button styling */
+    button.btn {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+        transition: 0.3s ease;
+    }
+
+    button.btn:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+        color: #fff;
+        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Title styling */
+    h3.text-center {
+        color: rgba(255, 255, 255, 0.85);
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+</style>
+<div class="row mt-5 justify-content-center">
+    <div class="col-md-6 col-sm-8">
+        <h3 class="text-center mb-4" style="color: #fff;">Edit Your Listing</h3>
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" enctype="multipart/form-data" class="glass-form p-4 rounded">
             <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required>
-            <!-- <br> <br> -->
+                <label for="title" class="form-label text-light">Title</label>
+                <input name="listing[title]" value="<%= listing.title %>" placeholder="Enter Title" type="text" class="form-control glass-input" required>
+                <div class="valid-feedback">Title looks good!</div>
+                <div class="invalid-feedback">Please give a Title</div>
             </div>
             <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea name="listing[description]" class="form-control"> <%= listing.description %></textarea>
-            <!-- <br> <br> -->
+                <label for="category" class="form-label text-light">Category</label>
+                <select name="listing[category]" class="form-control glass-input" required>
+                    <option value="">Select Category</option>
+                    <option value="Rooms">Rooms</option>
+                    <option value="Amazing Pools">Amazing Pools</option>
+                    <option value="Iconic Cities">Iconic Cities</option>
+                    <option value="Mountain">Mountain</option>
+                    <option value="Beach">Beach</option>
+                    <option value="Boats">Boats</option>
+                    <option value="Domes">Domes</option>
+                    <option value="Artic">Artic</option>
+                    <option value="Farms">Farms</option>
+                    <option value="Camps">Camps</option>
+                    <option value="Castles">Castles</option>
+                </select>
+                <div class="invalid-feedback">Please select a category</div>
             </div>
             <div class="mb-3">
-                <label class="form-label">Original Image</label>
-            </br>
-                <img src="<%=originalImageUrl%>">
+                <label for="description" class="form-label text-light">Description</label>
+                <textarea name="listing[description]" placeholder="Enter Description" class="form-control glass-input" required><%= listing.description %></textarea>
+                <div class="invalid-feedback">Please enter a short description</div>
             </div>
             <div class="mb-3">
-                <label for="image" class="form-label">Upload New Image</label>
-                <input name="listing[image]" type="file" class="form-control">
-            <!-- <br> <br> -->
+                <label class="form-label text-light">Original Image</label>
+                <br>
+                <img src="<%= originalImageUrl %>" class="img-fluid" alt="Original Image">
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label text-light">Upload New Image</label>
+                <input name="listing[image]" type="file" class="form-control glass-input">
             </div>
             <div class="row">
                 <div class="mb-3 col-md-4">
-                    <label for="price" class="form-label">Price</label>
-                    <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control">
-                <!-- <br> <br> -->
+                    <label for="price" class="form-label text-light">Price</label>
+                    <input name="listing[price]" value="<%= listing.price %>" placeholder="1200" type="number" class="form-control glass-input" required>
+                    <div class="invalid-feedback">Price should be valid</div>
                 </div>
-                <div class="mb-3 col-md-8">
-                    <label for="country" class="form-label">Country</label>
-                    <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control">
-                <!-- <br> <br> -->
+                <div class="mb-3 col-md-8">   
+                    <label for="country" class="form-label text-light">Country</label>
+                    <input name="listing[country]" value="<%= listing.country %>" placeholder="India" type="text" class="form-control glass-input" required>
+                    <div class="invalid-feedback">Country name should be valid</div>
                 </div>
             </div>
             <div class="mb-3">
-                <label for="location" class="form-label">Location</label>
-                <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control">
-            <!-- <br> <br> -->
+                <label for="location" class="form-label text-light">Location</label>
+                <input name="listing[location]" value="<%= listing.location %>" placeholder="Delhi, India" type="text" class="form-control glass-input" required>
+                <div class="invalid-feedback">Location should be valid</div>
             </div>
-            <button class="btn btn-dark">Done</button>
-            <br> <br>
+            <button class="btn btn-dark w-100">Done</button>
         </form>
     </div>
 </div>
-<!-- </body> -->
-<!-- </html> -->

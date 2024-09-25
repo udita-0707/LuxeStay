@@ -1,353 +1,86 @@
-<!-- <% layout("/layouts/boilerplate") -%>
-<script>
-    const mapToken = "<%=process.env.MAP_TOKEN%>"
-    const listing = <%- JSON.stringify(listing)%>;
-</script>
-<div class="row mt-3">
-    <div class="col-8 offset-3 ">
-        <h3><%= listing.title %></h3>
-    </div>
-    <div class="card col-6 offset-3 show-card">
-        <img src="<%= listing.image.url %>" class="card-img-top show-image" alt="listing_image">
-        <div class="card-body">
-            <p class="card-text">
-                Your Host: <i><%= listing.owner?.username || 'Unknown' %></i>
-            </p>
-            <p class="card-text"><%= listing.description %></p>
-            <p class="card-text"> &#8377;<%= listing.price.toLocaleString("en-IN") %></p>
-            <p class="card-text"><%= listing.location %></p>
-            <p class="card-text"><%= listing.country %></p>
-        </div>
-    </div>
-<div class="col-4 offset-2">
-<% if (currentUser && listing.owner && currentUser._id && listing.owner._id && currentUser._id.equals(listing.owner._id)) { %>
-<div class="btns">
-    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark offset-3">Edit</a>
-    <br />
-    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-        <button class="btn col-12 offset-5 del-btn">Delete</button>
-    </form>
-</div>
-<% } %>
-</div>
-
-<br>
-<div class="col-8 offset-3 mb-3">
-    <hr/>
-    <% if (currentUser) { %>
-        <h4>Leave a review</h4>
-        <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
-            <div class="mb-3 mt-3">
-                <label for="rating" class="form-label"> Rating </label>
-                <fieldset class="starability-slot">
-                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                    <label for="first-rate1" title="Terrible">1 star</label>
-                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                    <label for="first-rate2" title="Not good">2 stars</label>
-                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                    <label for="first-rate3" title="Average">3 stars</label>
-                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                    <label for="first-rate4" title="Very good">4 stars</label>
-                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                    <label for="first-rate5" title="Amazing">5 stars</label>
-                  </fieldset>
-                  
-            </div>
-            <div class="mb-3 mt-3">
-                <label for="comment" class="form-label">Comments</label>
-                <textarea name="review[comment]" id="comment" cols="30" rows="10" class="form-control" required> </textarea>
-                <div class="invalid-feedback">Please add some comments for the review</div>
-            </div>
-            <button class="btn btn-outline-dark"> Submit </button>
-        </form>
-        <hr/>
-    <% } %>
-    
-    <% if(listing.reviews.length > 0) { %>
-    <p>All Reviews</p>
-    <div class="row">
-        <% for (const review of listing.reviews) { %>
-            <div class="card col-5 ms-3 mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">@<%= review.author.username %></h5>
-                    <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
-                    <p class="card-text"><%= review.comment %></p>
-                </div>
-                <% if (currentUser && review.author && currentUser._id && review.author._id && currentUser._id.equals(review.author._id)) { %>
-                    <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                        <button class="btn btn-sm btn-dark">Delete</button>
-                    </form>
-                <% } %>
-            </div>
-        <% } %>
-    </div>
-<% } %>
-</div>
-<div class="col-5 offset-3 mb-3">
-    <h3>Where you'll be</h3>
-    <div id="map"></div>
-</div>
-<script src="/js/map.js"></script>
-</div> -->
-
 <% layout("/layouts/boilerplate") -%>
-<!-- <style>
-    /* Glass card styling */
-.glass-card {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: white;
-    transition: 0.3s ease;
-}
-
-.glass-card:hover {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
-}
-
-/* Image styling for the card */
-.show-image {
-    border-radius: 16px 16px 0 0;
-    height: 300px;
-    object-fit: cover;
-}
-
-/* Input and textarea glass effect */
-.glass-input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: white;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-    transition: 0.3s ease;
-}
-
-.glass-input:focus {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
-    outline: none;
-}
-
-/* Button styling */
-.btn-outline-light {
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #fff;
-    transition: 0.3s ease;
-}
-
-.btn-outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.4);
-}
-
-/* Map container styling */
-#map {
-    height: 400px;
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-} -->
-<style>
-    /* Glass card styling */
-.glass-card {
-    background: none;
-    border: none;
-    padding: 0;
-}
-
-/* Image styling for the card */
-.show-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    object-fit: cover;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-}
-
-/* Glass text container under the image */
-.glass-text {
-    position: relative;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: white;
-    padding: 16px;
-    margin-top: 20px;
-    transition: 0.3s ease;
-    max-height: 200px; /* You can adjust the height as needed */
-    overflow-y: auto; /* Adds scrollbar if the text overflows */
-    word-wrap: break-word;
-}
-.glass-text1{
-    margin-left: 10px;
-}
-.glass-text p {
-    margin: 0;
-    line-height: 1.5; /* Improves readability */
-    padding-bottom: 2px;
-}
-
-.review1{
-    margin-right: 10px;
-}
-.glass-text:hover {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
-    
-}
-
-/* Input and textarea glass effect */
-.glass-input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: white;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-    transition: 0.3s ease;
-    max-height: 200px; /* You can adjust the height as needed */
-    overflow-y: auto; /* Adds scrollbar if the text overflows */
-    word-wrap: break-word;
-}
-
-.glass-input:focus {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
-    outline: none;
-    color: #fff;
-}
-
-/* Button styling */
-.btn-outline-light {
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #fff;
-    transition: 0.3s ease;
-}
-
-.btn-outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.4);
-}
-
-/* Map container styling */
-#map {
-    height: 400px;
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-}
-
-.card-img-top {
-    width: 100%; /* Cover full width */
-    max-height: 400px; /* Set maximum height */
-    height: auto; /* Allow height to scale */
-    object-fit: cover; /* Cover the entire card */
-}
-
-.card-body {
-    padding: 0; /* Remove padding to ensure no space */
-    background: transparent; /* Transparent background for text */
-}
-
-</style>
-<script>
-    const mapToken = "<%=process.env.MAP_TOKEN%>";
-    const listing = <%- JSON.stringify(listing)%>
-</script>
-<!-- <div class="row mt-3 justify-content-center">
-    <div class="col-md-8">
-        <h3 class="text-center mb-4" style="color: #fff;"><%= listing.title %></h3>
-    </div>
-    <div class="card col-md-6 show-card glass-card">
-        <img src="<%= listing.image.url %>" class="card-img-top show-image" alt="listing_image">
-        <div class="card-body">
-            <p class="card-text">
-                <strong>Your Host:</strong> <i><%= listing.owner?.username || 'Unknown' %></i>
-            </p>
-            <p class="card-text"><%= listing.description %></p>
-            <p class="card-text">Price: &#8377;<%= listing.price.toLocaleString("en-IN") %></p>
-            <p class="card-text">Location: <%= listing.location %>, <%= listing.country %></p>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <% if (currentUser && listing.owner && currentUser._id && listing.owner._id && currentUser._id.equals(listing.owner._id)) { %>
-            <div class="btns">
-                <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-light">Edit</a>
-                <br />
-                <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-                    <button class="btn btn-danger mt-2">Delete</button>
-                </form>
-            </div>
-        <% } %>
-    </div>
-
-    <div class="col-md-8 mt-5">
-        <hr />
-        <% if (currentUser) { %>
-            <h4 class="text-light">Leave a Review</h4>
-            <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation glass-form p-4 rounded">
-                <div class="mb-3">
-                    <label for="rating" class="form-label text-light">Rating</label>
-                    <fieldset class="starability-slot">
-                    </fieldset>
-                </div>
-                <div class="mb-3">
-                    <label for="comment" class="form-label text-light">Comments</label>
-                    <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control glass-input" required></textarea>
-                    <div class="invalid-feedback">Please add some comments for the review</div>
-                </div>
-                <button class="btn btn-outline-light w-100">Submit</button>
-            </form>
-            <hr />
-        <% } %>
-
-        <% if(listing.reviews.length > 0) { %>
-            <h4 class="text-light">All Reviews</h4>
-            <div class="row">
-                <% for (const review of listing.reviews) { %>
-                    <div class="card col-md-5 ms-3 mb-3 glass-card">
-                        <div class="card-body">
-                            <h5 class="card-title">@<%= review.author.username %></h5>
-                            <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
-                            <p class="card-text"><%= review.comment %></p>
-                        </div>
-                        <% if (currentUser && review.author && currentUser._id && review.author._id && currentUser._id.equals(review.author._id)) { %>
-                            <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                                <button class="btn btn-sm btn-outline-light">Delete</button>
-                            </form>
-                        <% } %>
-                    </div>
-                <% } %>
-            </div>
-        <% } %>
-    </div>
-
-    <div class="col-md-8 mt-5">
-        <h3 class="text-light">Where you'll be</h3>
-        <div id="map" class="glass-card p-4"></div>
-    </div>
-</div>
-<script src="/js/map.js"></script> -->
 <script>
     const mapToken = "<%=process.env.MAP_TOKEN%>";
     const listing = <%- JSON.stringify(listing) %>;
 </script>
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: white;
+        transition: 0.3s ease;
+    }
+
+    .glass-card:hover {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+    }
+
+    .show-image {
+        width: 100%;
+        height: 300px;
+        border-radius: 16px;
+        object-fit: cover;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    }
+
+    .glass-text {
+        position: relative;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: white;
+        padding: 16px;
+        margin-top: 20px;
+        transition: 0.3s ease;
+        max-height: 200px;
+        overflow-y: auto;
+        word-wrap: break-word;
+    }
+
+    .glass-input {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: white;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        transition: 0.3s ease;
+    }
+
+    .glass-input:focus {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+        outline: none;
+        color: #fff;
+    }
+
+    #map {
+        height: 400px;
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+    }
+
+    .card-body {
+        padding: 0;
+        background: transparent;
+        margin-left: 20px;
+    }
+</style>
 
 <div class="row mt-3 justify-content-center">
     <div class="col-md-8">
         <h3 class="text-center mb-4" style="color: #fff;"><%= listing.title %></h3>
     </div>
 
-    <!-- Image covers entire card -->
     <div class="col-md-8">
         <img src="<%= listing.image.url %>" class="show-image card-img-top" alt="listing_image">
     </div>
-
-    <!-- Text details below the card -->
     <div class="col-md-8 offset glass-text glass-text1">
         <p class="card-text"><strong>Your Host:</strong> <i><%= listing.owner?.username || 'Unknown' %></i></p>
         <p class="card-text"><%= listing.description %></p>
@@ -367,27 +100,44 @@
         <% } %>
     </div>
 
-    <div class="col-md-8 mt-5 review1">
+    <!-- <div class="col-md-8 glass-text">
+        <p class="card-text"><strong>Your Host:</strong> <i><%= listing.owner?.username || 'Unknown' %></i></p>
+        <p class="card-text"><%= listing.description %></p>
+        <p class="card-text">Price: &#8377;<%= listing.price.toLocaleString("en-IN") %></p>
+        <p class="card-text">Location: <%= listing.location %></p>
+        <p class="card-text">Country: <%= listing.country %></p>
+    </div>
+
+    <div class="col-md-4">
+        <% if (currentUser && listing.owner && currentUser._id && listing.owner._id && currentUser._id.equals(listing.owner._id)) { %>
+            <div class="btns mt-3">
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-light">Edit</a>
+                <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="mt-2">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        <% } %>
+    </div> -->
+
+    <div class="col-md-8 mt-5">
         <hr />
         <% if (currentUser) { %>
             <h4 class="text-light">Leave a Review</h4>
-            <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation glass-form p-4 rounded">
+            <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation glass-card p-4 rounded">
                 <div class="mb-3">
                     <label for="rating" class="form-label text-light">Rating</label>
                     <fieldset class="starability-slot">
-                        <fieldset class="starability-slot">
-                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                            <label for="first-rate1" title="Terrible">1 star</label>
-                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                            <label for="first-rate2" title="Not good">2 stars</label>
-                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                            <label for="first-rate3" title="Average">3 stars</label>
-                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                            <label for="first-rate4" title="Very good">4 stars</label>
-                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                            <label for="first-rate5" title="Amazing">5 stars</label>
-                          </fieldset>
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
                     </fieldset>
                 </div>
                 <div class="mb-3">
@@ -416,7 +166,9 @@
                     </div>
                 <% } %>
             </div>
-        <% } %>
+        <% } else { %>
+                <p class="text-light">No reviews yet. Be the first to leave one!</p>
+            <% } %>
     </div>
 
     <div class="col-md-8 mt-5">
@@ -425,4 +177,3 @@
     </div>
 </div>
 <script src="/js/map.js"></script>
-

@@ -106,6 +106,24 @@ h3.text-center {
                 <div class="invalid-feedback">Please give a Title</div>
             </div>
             <div class="mb-3">
+                <label for="category" class="form-label text-light">Category</label>
+                <select name="listing[category]" class="form-control glass-input" required>
+                    <option value="">Select Category</option> <!-- Placeholder -->
+                    <option value="Rooms">Rooms</option>
+                    <option value="Amazing Pools">Amazing Pools</option>
+                    <option value="Iconic Cities">Iconic Cities</option>
+                    <option value="Mountain">Mountain</option>
+                    <option value="Beach">Beach</option>
+                    <option value="Boats">Boats</option>
+                    <option value="Domes">Domes</option>
+                    <option value="Artic">Artic</option>
+                    <option value="Farms">Farms</option>
+                    <option value="Camps">Camps</option>
+                    <option value="Castles">Castles</option>
+                </select>
+                <div class="invalid-feedback">Please select a category</div>
+            </div>
+            <div class="mb-3">
                 <label for="description" class="form-label text-light">Description</label>
                 <textarea name="listing[description]" placeholder="Enter Description" class="form-control glass-input" required></textarea>
                 <div class="invalid-feedback">Please enter a short description</div>

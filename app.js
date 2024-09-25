@@ -100,7 +100,7 @@ app.use("/", userRouter);
 
 //Setting up the routes
 app.all("*", (req, res, next) =>{
-	next(new ExpressError(404, "Page not Found"));
+	next(new ExpressError(404, "Page coming soon!"));
 });
 
 //Custom Error Handling

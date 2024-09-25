@@ -1,51 +1,134 @@
+<head>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
 <style>
-  .btn-search{
+  .btn-search {
     /* background-color: black; */
     color: white;
     border-color: white;
     border-radius: 25px;
-    padding: auto;
+    padding: 0.5rem 1rem; /* Adjusted padding */
   }
 
-  .btn-search:hover{
+  .btn-search:hover {
     color: white;
-    background-color: var(--primary-color);;
+    background-color: var(--primary-color);
   }
-  .btn-search i{
+
+  .btn-search i {
     margin-right: 0.5rem;
   }
 
-  .search-input{
+  .search-input {
     border-radius: 25px;
     padding: 0.75rem 1.5rem 0.75rem 3rem;
   }
+
+  .btn-login,
+  .btn-logout {
+    color: white;
+    border: 2px solid white;
+    border-radius: 25px;
+    padding: 0.5rem 1rem; /* Adjusted padding */
+    margin-left: 10px; /* Space between buttons */
+    background-color: transparent;
+    transition: background-color 0.3s, color 0.3s; /* Transition effects */
+  }
+
+  .btn-login:hover,
+  .btn-logout:hover {
+    background-color: white; /* Change to white on hover */
+    color: var(--primary-color); /* Change text color on hover */
+  }
+
+   /* Media queries for responsiveness */
+   @media (max-width: 768px) {
+    .navbar-nav {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .navbar-nav.ml-auto {
+      width: 100%; /* Full width for the right side buttons */
+      margin-top: 10px; /* Space between nav links and buttons */
+    }
+
+    .form-inline {
+      width: 100%; /* Full width for search form */
+    }
+
+    .search-input {
+      width: calc(100% - 80px); /* Adjust input width */
+      margin-right: 10px; /* Space between input and button */
+    }
+
+    .btn-search {
+      width: 80px; /* Fixed width for search button */
+    }
+
+    .btn-login, .btn-logout {
+      width: 100%; /* Full width for buttons */
+      margin-left: 0; /* Remove left margin */
+      margin-top: 10px; /* Space above buttons */
+    }
+  }
 </style>
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link " href="/">Home</a>
-          <a class="nav-link" href="/listings">Explore</a>
-        </div>
-        <div class="navbar-nav ml-auto">
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2 search-input" type="search" placeholder="Search Destination" aria-label="Search">
-            <button class="btn btn-search btn-outline my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
-          </form>
-        </div>
-        <div class="navbar-nav ml-auto">
-          <a class="nav-link" href="/listings/new">Add New Listing</a>
-          <% if(!currentUser) { %>
-            <!-- <a class="nav-link " href="/signup"><b>SignUp</b></a> -->
-            <a class="nav-link" href="/login"><b>LogIn</b></a>
-          <% } %> <% if(currentUser) { %>
-          <a class="nav-link" href="/logout"><b>LogOut</b></a>
-          <% } %>
-        </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+      <div class="navbar-nav ml-auto">
+        <form class="form-inline my-2 my-lg-0" action="/listings" method="GET" id="searchForm">
+          <div style="position: relative; display: inline-block;">
+            <input class="form-control mr-sm-2 search-input" 
+                   type="search" 
+                   name="location" 
+                   placeholder="Search Destination" 
+                   aria-label="Search" 
+                   value="<%= typeof location !== 'undefined' ? location : '' %>" 
+                   required
+                   id="searchInput">
+          </div>
+          <button class="btn btn-search btn-outline my-2 my-sm-0" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+          </button>
+        </form>
+      </div>
+      <div class="navbar-nav ml-auto">
+        <a class="nav-link" href="/listings/new">Add New Listing</a>
+        <% if(!currentUser) { %>
+          <a class="btn btn-login" href="/login"><b>LogIn</b></a>
+        <% } %>
+        <% if(currentUser) { %>
+          <a class="btn btn-logout" href="/logout"><b>LogOut</b></a>
+        <% } %>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
+</body>
+<script>
+  document.getElementById('clearSearch')?.addEventListener('click', function() {
+    // Clear the search input
+    document.getElementById('searchInput').value = '';
+    
+    // Redirect back to the original listings page (no query parameters)
+    window.location.href = '/listings'; 
+  });
+</script>
+
+<!-- Bootstrap JS and dependencies (Popper.js) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>

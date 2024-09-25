@@ -12,7 +12,7 @@ const listingController = require("../controllers/listings");
 router
 	.route("/")
 	.get(wrapAsync(listingController.index))
-	.post(isLoggedIn, validateListing, wrapAsync(listingController.createListing));
+	.post(isLoggedIn, upload.single('image'), wrapAsync(listingController.createListing));
 
 //New Route
 router.get("/new", isLoggedIn, listingController.renderNewForm)
