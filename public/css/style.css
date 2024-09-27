@@ -1,9 +1,23 @@
+.listofhotels{
+    display: none;
+}
+
+
+html {
+    width:100%;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
 body {
     background-color: #1f2937 !important;
     font-family: "Plus Jakarta Sans", sans-serif !important;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    margin: 0;
+    padding: 0;
 
 }
 
@@ -135,6 +149,6 @@ body {
 
 #map {
     height: 400px;
-    width: 95vb;
+    /* width: 95vb; */
 }
 

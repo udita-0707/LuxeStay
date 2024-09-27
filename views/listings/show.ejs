@@ -71,6 +71,27 @@
         background: transparent;
         margin-left: 20px;
     }
+    /* .map1{
+        margin: 0 20px 0 0;
+    } */
+    /* Styles to make Edit and Delete buttons the same size */
+.edit-btn, .delete-btn {
+    min-width: 100px; /* Ensures both buttons have a minimum width */
+    padding: 10px 20px; /* Adds consistent padding */
+    font-size: 16px; /* Adjusts the font size */
+    border-radius: 8px; /* Makes them rounded for consistency */
+}
+
+.btns button {
+    display: inline-block;
+    text-align: center;
+}
+
+/* Optional: You can adjust the margin if you want */
+.btns form {
+    margin-right: 10px;
+}
+
 </style>
 
 <div class="row mt-3 justify-content-center">
@@ -89,14 +110,26 @@
         <p class="card-text">Country: <%= listing.country %></p>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-8">
         <% if (currentUser && listing.owner && currentUser._id && listing.owner._id && currentUser._id.equals(listing.owner._id)) { %>
-            <div class="btns mt-3">
-                <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-light">Edit</a>
+            <!-- <div class="btns mt-3 d-flex justify-content-start">
+                 <button class="btn btn-outline-light btn1 mr-2"><a href="/listings/<%= listing._id %>/edit">Edit</a></button> 
+                <form action="/listings/<%= listing._id %>/edit" method="GET">
+                    <button class="btn btn-outline-light mr-2">Edit</button>
+                </form>
                 <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="mt-2">
                     <button class="btn btn-danger">Delete</button>
                 </form>
+            </div> -->
+            <div class="btns mt-3 d-flex justify-content-start">
+                <form action="/listings/<%= listing._id %>/edit" method="GET">
+                    <button class="btn btn-outline-light edit-btn mr-2">Edit</button>
+                </form>
+                <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+                    <button class="btn btn-danger delete-btn ml-2">Delete</button>
+                </form>
             </div>
+            
         <% } %>
     </div>
 
@@ -171,7 +204,7 @@
             <% } %>
     </div>
 
-    <div class="col-md-8 mt-5">
+    <div class="col-md-8 mt-5 map1">
         <h3 class="text-light">Where you'll be</h3>
         <div id="map" class="glass-card p-4"></div>
     </div>
